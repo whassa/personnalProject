@@ -1,6 +1,6 @@
 <?php
 /*
- * Error404.php
+ * Index.php
  * 
  * Copyright 2017 remi Graton <whassa@whassa-Lenovo-Y50-70>
  * 
@@ -21,5 +21,31 @@
  * 
  * 
  */
- require_once "Template.php";
+    
+    //require_once "Template.php";
+
+    // index of the website
+    
+    
+   
+    class viewIndex{
+        
+        private $template;
+        
+        public function __construct($template) {
+            
+            $this->template = $template;
+            
+        }
+        
+        public function generateLoginView(){
+           require_once "Template.php";
+           echo $template;
+        }
+        
+    }
+    
+    
+
 ?>
+

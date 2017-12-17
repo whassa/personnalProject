@@ -1,4 +1,6 @@
 <?php
+
+    include "model/database.php";
 /* 
  * Index of my website.
  * Every request should be brought
@@ -22,37 +24,64 @@
  * 
  * 
  */
+ 
+    // Start the session 
+    session_start();
+    
+    // Check if there's a db connection
+    if ( !isset($dbConnection)){
+        
+        // Create a PDO db connection object
+        $dbConnection = new dbConnection();
+    
+    }
+    
+    // Get the request URL from the server
     $requestUrl = $_SERVER['REQUEST_URI'];
+    
+    
+    // Check if there's a request URL
     if (isset($requestUrl)){
+        
+        // Remove the first thing to remove the boardgame string
         $requestUrl = str_replace("/boardgameWebsite/", ""
         , $requestUrl);
-        $requestUrl = ucfirst($requestUrl);
-        $requestUrl = "controller/".$requestUrl;
-        error_log($requestUrl);
         
+        // Capitalize first character to fit with our files
+        $requestUrl = ucfirst($requestUrl);
+        
+        // Get the controller file
+        $requestUrl = "controller/".$requestUrl;
+        
+        // Check if there's a php action on the get request
+        if (preg_match("/.*\.php/", $requestUrl, $requestUrlFile) == 1){
+            
+          $requestUrl = $requestUrlFile[0];
+        
+        }
+        
+        // Check if file exist
         if (file_exists($requestUrl)) {
+            
+            // Include the file to show
             include ($requestUrl);
-            /*
-            if ((include $requestUrl) == TRUE) {
-                
-            } else {
-                showError404();
-            }
-            */
+         
         } else{
+            
+            // Call the error 404
             showError404();
+        
         }
     } else {
+        
+        // Call the error 404
         showError404();
+    
     }
 
     // Show the error 404 of the main
     function showError404(){
         include ("view/Error404.php");
-    }
-    
-    function callAction($action){
-    
     }
 
 ?>

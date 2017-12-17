@@ -21,8 +21,96 @@
  * 
  * 
  */
-
-
-
-	echo "swag";
+    include "view/Index.php";
+    
+    // View object
+    if ( !isset($viewIndex)){
+        $viewIndex = new viewIndex("");
+    }
+    
+    // Call the class controller
+    if ( !isset($controller)){
+        $controller = new ControllerIndex($dbConnection, $viewIndex);
+    }
+    $controller->callAction();
+    
+    
+    class controllerIndex{
+        
+        private $dbConnection;
+        private $view;
+        
+        
+        public function __construct($dbConnection, $viewIndex) {
+            
+            $this->dbConnection = $dbConnection;
+            $this->view = $viewIndex;
+            
+        }
+    
+        // Check if there's a function to call from the post action.
+        
+        public function callAction(){
+           
+           // Check if there's an action called
+           if (isset($_GET['action'])){
+               
+             // Call user function
+             call_user_func(array( $this, $_GET['action']));
+           
+           } else {
+             
+              $this->view->generateLoginView();
+          
+               
+           }
+        }
+      
+        
+        // Get the registerFile
+        private function register(){
+            
+            if ( readfile("../view/register.html") ){
+                
+            }
+            
+        }
+        
+        // Create account with the db connection
+        private function createAccount(){
+            
+        }
+        
+        // Login in the user 
+        private function login(){
+           
+           $email = $_POST['username'];
+           $password = $_POST['password'];
+           
+           if ($this->dbConnection->tryLogin( $email, $password)){
+               
+               $html_body = "salut";
+               
+           } else {
+               
+               $html_body = "Unable to connect";
+           
+           }
+           
+           // Generate view 
+           $this->view->generateLoginView();
+        } 
+        
+        // Disconnect the user
+        private function disconnect(){
+            
+           session_unset();   
+           // Generate view 
+            $this->view->generateLoginView();
+        }
+        
+        
+    }
+    
+    
 ?>

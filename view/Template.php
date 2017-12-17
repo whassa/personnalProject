@@ -23,6 +23,9 @@
  */
 
 ?>
+<?php 
+
+    $template ='
 <html>
 
 <head>
@@ -87,12 +90,6 @@
           color: #aeaeae;
         }
         
-        div.dropdown-menu {
-            
-            backgroud-color: #424040;
-            
-        }
-        
 
         @media (max-width: 767px) {
           .navbar-default .navbar-nav .open .dropdown-menu > li > a {
@@ -134,25 +131,52 @@
                 <li><a href="#">Evenements</a></li>
                 <li><a href="#" >Systeme de location</a></li>
                 </li>
-              </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown pull-right" id="login">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin"><span class="glyphicon glyphicon-user"></span> Login</a>
-                    <div class="dropdown-menu" style="padding:17px;">
-                      <form class="form" id="formLogin"> 
-                        <input name="username" id="username" placeholder="Username" type="text"> 
-                        <input name="password" id="password" placeholder="Password" type="password"><br>
-                        <button type="button" id="btnLogin" class="btn">Login</button>
-                      </form>
-                    </div>
-                  </li>
-                 </ul>
+              </ul>';
+              
+                if ( !isset($_SESSION['userId'])){
+                   $template .= '
+                    <ul class="nav navbar-nav navbar-right">
+                      <li class="dropdown pull-left" id="register">
+                        <a class="dropdown-toggle" href="index.php?action=register" data-toggle="dropdown" id="navRegister"> Register Now</a>
+                      </li>
+                      <li class="dropdown pull-right" id="login">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin"> Login</a>
+                        <div class="dropdown-menu" style="padding:17px; background: #424040;">
+                          <form class="form" id="formLogin" action="index.php?action=login" method="post">  
+                            <input name="username" id="email" placeholder="Email" type="text"> 
+                            <input name="password" id="password" placeholder="Password" type="password"><br>
+                            <button type="submit" id="btnLogin" class="btn mx-auto">Login</button>
+                          </form>
+                        </div>
+                      </li>
+                    </ul>';
+                } else {
+                  $template .= '
+                    <ul class="nav navbar-nav navbar-right">
+                      <li class="dropdown pull-right" id="login">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" id="navLogin">'.$_SESSION['userEmail'].'</a>
+                        
+                            <ul class="dropdown-menu" style="padding:17px; background: #424040;">
+                                <li><a href="#">Your profile</a></li>
+                                <li><a href="index.php?action=disconnect">Disconnect</a></li>
+                            </ul>
+                      </li>
+                    </ul>';
+                }
+  $template .= '
             </div><!-- /.navbar-collapse --> 
         </div><!-- /.container-fluid -->
     </nav>
     <div class="row">
         <div class="col-xs-12 col-md-offset-3 col-md-6" style="background-color: #fff; min-height: 80vh;border-radius: 5px;"> 
-          <?php echo $html_body ?>
+          <?php 
+            
+            if (isset($html_body)){
+                
+                echo $html_body;
+                
+            }   
+          ?>
         </div>
     </div>
 </body>
@@ -164,4 +188,4 @@
 <script>
     
 </script>
-</html>
+</html>';
